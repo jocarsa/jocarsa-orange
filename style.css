@@ -52,6 +52,9 @@ body,html{
 	margin:auto;
 	
 }
+#edit-list-screen{
+	padding:20px;
+}
 .auth-container h2 {
   text-align: center;
   color: #ff7f00;
@@ -166,6 +169,7 @@ h2, h3 {
   width: 50px;
   height: 24px;
   margin: 0 10px;
+  margin-left: auto;
 }
 .switch input {
   opacity: 0;

@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Botón para editar el nombre del producto
           const editBtn = document.createElement("button");
           editBtn.className = "edit-btn";
-          editBtn.textContent = "Editar";
+          editBtn.textContent = "E";
           editBtn.addEventListener("click", () => {
             const newName = prompt("Nuevo nombre del producto:", product.name);
             if (newName && newName.trim() !== "") {
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Botón para eliminar el producto
           const deleteBtn = document.createElement("button");
           deleteBtn.className = "delete-btn";
-          deleteBtn.textContent = "Eliminar";
+          deleteBtn.textContent = "X";
           deleteBtn.addEventListener("click", () => {
             if (confirm("¿Eliminar este producto?")) {
               deleteProduct(product.id);
