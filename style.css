@@ -11,6 +11,10 @@ body {
   background: #fff;
   color: #333;
 }
+body,html{
+	padding:0px;
+	margin:0px;
+}
 
 /* Header de la App */
 #app-header {
@@ -35,13 +39,18 @@ body {
 
 /* Sección de Autenticación */
 #auth-section {
-  max-width: 400px;
+  max-width: 100%;
   margin: 40px auto;
   padding: 20px;
-  border: 2px solid #ff7f00;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 127, 0, 0.2);
+  
+  text-align:center;
+  
   background: #fff;
+}
+.auth-container img{
+	width:50%;
+	margin:auto;
+	
 }
 .auth-container h2 {
   text-align: center;
@@ -103,9 +112,9 @@ button:hover {
 
 /* Sección de la App */
 #app-section {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 0 10px;
+  max-width: 100%;
+  margin: 0px auto;
+  padding: 0 00px;
 }
 section {
   margin: 20px 0;
@@ -195,7 +204,7 @@ h2, h3 {
 /* Responsive */
 @media (max-width: 600px) {
   #app-section {
-    padding: 0 10px;
+    padding: 0 0px;
   }
   #app-header h1 {
     font-size: 20px;
