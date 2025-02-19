@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jocarsa | orange</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sección de autenticación -->
+  <div id="auth-section">
+    <div class="auth-container">
+      <h2>Iniciar Sesión</h2>
+      <form id="login-form">
+        <input type="text" id="login-username" placeholder="Usuario" required>
+        <input type="password" id="login-password" placeholder="Contraseña" required>
+        <button type="submit">Iniciar Sesión</button>
+      </form>
+      <h2>Registrarse</h2>
+      <form id="register-form">
+        <input type="text" id="register-username" placeholder="Usuario" required>
+        <input type="password" id="register-password" placeholder="Contraseña" required>
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sección principal de la aplicación -->
+  <div id="app-section" style="display:none;">
+    <header id="app-header">
+      <div class="header-left">
+        <img src="orange.png" alt="Logo" id="app-logo">
+        <h1>jocarsa | orange</h1>
+      </div>
+      <button id="logout-btn">Cerrar Sesión</button>
+    </header>
+    <nav id="nav-menu">
+      <button id="nav-list">Mis Listas</button>
+      <button id="nav-new">Nueva Lista</button>
+      <button id="nav-edit">Editar Lista</button>
+    </nav>
+    
+    <!-- Pantalla: Lista de Listas -->
+    <section id="list-screen">
+      <h2>Mis Listas de la Compra</h2>
+      <div id="list-container">
+        <!-- Se cargarán las listas aquí -->
+      </div>
+    </section>
+    
+    <!-- Pantalla: Crear Nueva Lista -->
+    <section id="new-list-screen" style="display:none;">
+      <h2>Crear Nueva Lista</h2>
+      <form id="new-list-form">
+        <input type="text" id="new-list-name" placeholder="Nombre de la lista" required>
+        <textarea id="new-list-description" placeholder="Descripción"></textarea>
+        <input type="date" id="new-list-date" required>
+        <button type="submit">Crear Lista</button>
+      </form>
+    </section>
+    
+    <!-- Pantalla: Editar Lista (incluye productos) -->
+    <section id="edit-list-screen" style="display:none;">
+      <h2>Editar Lista</h2>
+      <form id="edit-list-form">
+        <input type="hidden" id="edit-list-id">
+        <input type="text" id="edit-list-name" placeholder="Nombre de la lista" required>
+        <textarea id="edit-list-description" placeholder="Descripción"></textarea>
+        <input type="date" id="edit-list-date" required>
+        <button type="submit">Guardar Cambios</button>
+      </form>
+      <button id="delete-list-btn" class="danger-btn">Eliminar Lista</button>
+      <h3>Productos en la Lista</h3>
+      <div id="products-container">
+        <!-- Se cargarán los productos aquí -->
+      </div>
+      <form id="new-product-form">
+        <input type="text" id="product-name" placeholder="Nombre del producto" required>
+        <button type="submit">Añadir Producto</button>
+      </form>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,204 @@
+/* Base y reset */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Ubuntu, sans-serif;
+  background: #fff;
+  color: #333;
+}
+
+/* Header de la App */
+#app-header {
+  background: #ff7f00;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+}
+#app-logo {
+  height: 40px;
+  margin-right: 10px;
+}
+#app-header h1 {
+  font-size: 24px;
+}
+
+/* Sección de Autenticación */
+#auth-section {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 2px solid #ff7f00;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 127, 0, 0.2);
+  background: #fff;
+}
+.auth-container h2 {
+  text-align: center;
+  color: #ff7f00;
+  margin-bottom: 10px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+input[type="text"],
+input[type="password"],
+input[type="date"],
+textarea {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+button {
+  padding: 10px;
+  margin: 10px 0;
+  background: #ff7f00;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+button:hover {
+  background: #e66a00;
+}
+
+/* Botón de eliminación (rojo) */
+.danger-btn {
+  background: #d9534f;
+}
+.danger-btn:hover {
+  background: #c9302c;
+}
+
+/* Menú de Navegación */
+#nav-menu {
+  display: flex;
+  justify-content: center;
+  background: #ffe0b3;
+  padding: 10px;
+}
+#nav-menu button {
+  margin: 0 5px;
+  background: #ff7f00;
+}
+#nav-menu button:hover {
+  background: #e66a00;
+}
+
+/* Sección de la App */
+#app-section {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+section {
+  margin: 20px 0;
+}
+h2, h3 {
+  text-align: center;
+  color: #ff7f00;
+}
+
+/* Listas y Productos */
+.list-item, .product-item {
+  background: #fff;
+  border: 1px solid #ff7f00;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow 0.3s ease;
+}
+.list-item:hover, .product-item:hover {
+  box-shadow: 0 4px 8px rgba(255, 127, 0, 0.3);
+}
+
+/* Estilos para los botones de edición y eliminación en productos */
+.product-actions button {
+  margin-left: 5px;
+  padding: 5px 8px;
+  font-size: 14px;
+}
+.product-actions .edit-btn {
+  background: #5bc0de;
+}
+.product-actions .edit-btn:hover {
+  background: #31b0d5;
+}
+.product-actions .delete-btn {
+  background: #d9534f;
+}
+.product-actions .delete-btn:hover {
+  background: #c9302c;
+}
+
+/* Custom Switch (interruptor animado) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 0 10px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+.switch input:checked + .slider {
+  background-color: #ff7f00;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #app-section {
+    padding: 0 10px;
+  }
+  #app-header h1 {
+    font-size: 20px;
+  }
+}
+
