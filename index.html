@@ -44,6 +44,7 @@
       <button id="nav-list">Mis Listas</button>
       <button id="nav-new">Nueva Lista</button>
       <button id="nav-edit">Editar Lista</button>
+      <button id="nav-theme">Temas</button>
     </nav>
 
     <!-- Pantalla: Lista de Listas (Mis Listas) -->
@@ -57,14 +58,18 @@
     <!-- Pantalla: Productos de la Lista Seleccionada -->
     <section id="product-screen" style="display:none;">
       <h2>Productos de la Lista</h2>
-      <!-- Aquí mostramos la info de la lista en modo lectura -->
+      <!-- Información de la lista en modo lectura -->
       <div id="product-list-info" style="margin-bottom: 1em;"></div>
 
       <div id="products-container">
         <!-- Se cargarán los productos aquí -->
       </div>
       <form id="new-product-form">
-        <input type="text" id="product-name" placeholder="Nombre del producto" required />
+        <div class="product-input-group">
+          <input type="text" id="product-name" placeholder="Nombre del producto" required />
+          <!-- Default product color is white -->
+          <input type="color" id="product-color" value="#ffffff" title="Selecciona un color (opcional)" />
+        </div>
         <button type="submit">Añadir Producto</button>
       </form>
     </section>
@@ -75,6 +80,8 @@
       <form id="new-list-form">
         <input type="text" id="new-list-name" placeholder="Nombre de la lista" required />
         <textarea id="new-list-description" placeholder="Descripción"></textarea>
+        <!-- New list color input (default white) -->
+        <input type="color" id="new-list-color" value="#ffffff" title="Color de la lista (opcional)" />
         <input type="date" id="new-list-date" required />
         <button type="submit">Crear Lista</button>
       </form>
@@ -84,7 +91,7 @@
     <section id="edit-list-screen" style="display: none;">
       <h2>Selecciona una Lista para Editar</h2>
       <div id="edit-lists-container">
-        <!-- Aquí cargamos las listas para elegir y editar -->
+        <!-- Se cargan las listas para editar -->
       </div>
 
       <div id="edit-form-container" style="display:none;">
@@ -93,12 +100,29 @@
           <input type="hidden" id="edit-list-id" />
           <input type="text" id="edit-list-name" placeholder="Nombre de la lista" required />
           <textarea id="edit-list-description" placeholder="Descripción"></textarea>
+          <!-- List color input (default white) -->
+          <input type="color" id="edit-list-color" value="#ffffff" title="Color de la lista (opcional)" />
           <input type="date" id="edit-list-date" required />
           <button type="submit">Guardar Cambios</button>
         </form>
         <button id="delete-list-btn" class="danger-btn">Eliminar Lista</button>
       </div>
     </section>
+  </div>
+
+  <!-- Theming Screen -->
+  <div id="theme-screen" style="display: none;">
+    <h3>Selecciona un tema</h3>
+    <div id="theme-options">
+      <div class="theme-option" data-hue="0" style="background: hsl(0,70%,50%);"></div>
+      <div class="theme-option" data-hue="45" style="background: hsl(45,70%,50%);"></div>
+      <div class="theme-option" data-hue="90" style="background: hsl(90,70%,50%);"></div>
+      <div class="theme-option" data-hue="135" style="background: hsl(135,70%,50%);"></div>
+      <div class="theme-option" data-hue="180" style="background: hsl(180,70%,50%);"></div>
+      <div class="theme-option" data-hue="225" style="background: hsl(225,70%,50%);"></div>
+      <div class="theme-option" data-hue="270" style="background: hsl(270,70%,50%);"></div>
+      <div class="theme-option" data-hue="315" style="background: hsl(315,70%,50%);"></div>
+    </div>
   </div>
 
   <script src="app.js"></script>

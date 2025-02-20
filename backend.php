@@ -14,25 +14,33 @@ $action = $input['action'];
 $db = new SQLite3('../databases/orange.db');
 
 // Crear las tablas si no existen
+
+// Users: added 'theme' column (default 0)
 $db->exec("CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    theme INTEGER DEFAULT 0
 )");
 
+// Lists: added 'color' and 'completed' columns (color default white, completed default 0)
 $db->exec("CREATE TABLE IF NOT EXISTS lists (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     name TEXT,
     description TEXT,
-    date TEXT
+    date TEXT,
+    color TEXT,
+    completed INTEGER DEFAULT 0
 )");
 
+// Products: added 'color' column (default white)
 $db->exec("CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     list_id INTEGER,
     name TEXT,
-    switch INTEGER DEFAULT 0
+    switch INTEGER DEFAULT 0,
+    color TEXT
 )");
 
 // Función para hashear contraseñas
@@ -74,9 +82,27 @@ switch($action) {
         $result = $stmt->execute();
         $user = $result->fetchArray(SQLITE3_ASSOC);
         if ($user && password_verify($password, $user['password'])) {
-            echo json_encode(["success" => true, "user" => ["id" => $user['id'], "username" => $user['username']]]);
+            echo json_encode(["success" => true, "user" => [
+                "id" => $user['id'], 
+                "username" => $user['username'],
+                "theme" => $user['theme']
+            ]]);
         } else {
             echo json_encode(["success" => false, "message" => "Credenciales incorrectas."]);
+        }
+        break;
+
+    case "update_theme":
+        $user_id = intval($input['user_id']);
+        $theme = intval($input['theme']);
+        $stmt = $db->prepare("UPDATE users SET theme = :theme WHERE id = :user_id");
+        $stmt->bindValue(':theme', $theme, SQLITE3_INTEGER);
+        $stmt->bindValue(':user_id', $user_id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        if ($result) {
+            echo json_encode(["success" => true, "message" => "Tema actualizado correctamente."]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Error al actualizar el tema."]);
         }
         break;
 
@@ -85,15 +111,17 @@ switch($action) {
         $name = trim($input['name']);
         $description = trim($input['description']);
         $date = trim($input['date']);
+        $color = isset($input['color']) && trim($input['color']) !== "" ? trim($input['color']) : "#ffffff";
         if (empty($name) || empty($date)) {
             echo json_encode(["success" => false, "message" => "Nombre y fecha son requeridos."]);
             exit;
         }
-        $stmt = $db->prepare("INSERT INTO lists (user_id, name, description, date) VALUES (:user_id, :name, :description, :date)");
+        $stmt = $db->prepare("INSERT INTO lists (user_id, name, description, date, color) VALUES (:user_id, :name, :description, :date, :color)");
         $stmt->bindValue(':user_id', $user_id, SQLITE3_INTEGER);
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
         $stmt->bindValue(':description', $description, SQLITE3_TEXT);
         $stmt->bindValue(':date', $date, SQLITE3_TEXT);
+        $stmt->bindValue(':color', $color, SQLITE3_TEXT);
         $result = $stmt->execute();
         if ($result) {
             echo json_encode(["success" => true, "message" => "Lista creada correctamente."]);
@@ -104,7 +132,11 @@ switch($action) {
 
     case "get_lists":
         $user_id = intval($input['user_id']);
-        $stmt = $db->prepare("SELECT * FROM lists WHERE user_id = :user_id ORDER BY date DESC");
+        // Select lists along with a count of products in each list.
+        $stmt = $db->prepare("SELECT l.*, (SELECT COUNT(*) FROM products WHERE list_id = l.id) as product_count 
+                              FROM lists l 
+                              WHERE user_id = :user_id 
+                              ORDER BY completed ASC, date DESC");
         $stmt->bindValue(':user_id', $user_id, SQLITE3_INTEGER);
         $result = $stmt->execute();
         $lists = [];
@@ -119,14 +151,16 @@ switch($action) {
         $name = trim($input['name']);
         $description = trim($input['description']);
         $date = trim($input['date']);
+        $color = isset($input['color']) && trim($input['color']) !== "" ? trim($input['color']) : "#ffffff";
         if (empty($name) || empty($date)) {
             echo json_encode(["success" => false, "message" => "Nombre y fecha son requeridos."]);
             exit;
         }
-        $stmt = $db->prepare("UPDATE lists SET name = :name, description = :description, date = :date WHERE id = :list_id");
+        $stmt = $db->prepare("UPDATE lists SET name = :name, description = :description, date = :date, color = :color WHERE id = :list_id");
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
         $stmt->bindValue(':description', $description, SQLITE3_TEXT);
         $stmt->bindValue(':date', $date, SQLITE3_TEXT);
+        $stmt->bindValue(':color', $color, SQLITE3_TEXT);
         $stmt->bindValue(':list_id', $list_id, SQLITE3_INTEGER);
         $result = $stmt->execute();
         if ($result) {
@@ -138,7 +172,6 @@ switch($action) {
 
     case "delete_list":
         $list_id = intval($input['list_id']);
-        // Eliminar todos los productos asociados a la lista
         $db->exec("DELETE FROM products WHERE list_id = $list_id");
         $stmt = $db->prepare("DELETE FROM lists WHERE id = :list_id");
         $stmt->bindValue(':list_id', $list_id, SQLITE3_INTEGER);
@@ -150,16 +183,32 @@ switch($action) {
         }
         break;
 
+    case "toggle_list":
+        $list_id = intval($input['list_id']);
+        $completed = intval($input['completed']);
+        $stmt = $db->prepare("UPDATE lists SET completed = :completed WHERE id = :list_id");
+        $stmt->bindValue(':completed', $completed, SQLITE3_INTEGER);
+        $stmt->bindValue(':list_id', $list_id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        if ($result) {
+            echo json_encode(["success" => true, "message" => "Estado de lista actualizado."]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Error al actualizar el estado de la lista."]);
+        }
+        break;
+
     case "add_product":
         $list_id = intval($input['list_id']);
         $name = trim($input['name']);
+        $color = isset($input['color']) && trim($input['color']) !== "" ? trim($input['color']) : "#ffffff";
         if (empty($name)) {
             echo json_encode(["success" => false, "message" => "Nombre del producto requerido."]);
             exit;
         }
-        $stmt = $db->prepare("INSERT INTO products (list_id, name) VALUES (:list_id, :name)");
+        $stmt = $db->prepare("INSERT INTO products (list_id, name, color) VALUES (:list_id, :name, :color)");
         $stmt->bindValue(':list_id', $list_id, SQLITE3_INTEGER);
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
+        $stmt->bindValue(':color', $color, SQLITE3_TEXT);
         $result = $stmt->execute();
         if ($result) {
             echo json_encode(["success" => true, "message" => "Producto añadido correctamente."]);
@@ -209,6 +258,20 @@ switch($action) {
             echo json_encode(["success" => true, "message" => "Producto actualizado correctamente."]);
         } else {
             echo json_encode(["success" => false, "message" => "Error al actualizar el producto."]);
+        }
+        break;
+        
+    case "update_product_color":
+        $product_id = intval($input['product_id']);
+        $color = trim($input['color']);
+        $stmt = $db->prepare("UPDATE products SET color = :color WHERE id = :product_id");
+        $stmt->bindValue(':color', $color, SQLITE3_TEXT);
+        $stmt->bindValue(':product_id', $product_id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        if ($result) {
+            echo json_encode(["success" => true, "message" => "Color de producto actualizado correctamente."]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Error al actualizar el color del producto."]);
         }
         break;
         
