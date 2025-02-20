@@ -11,7 +11,7 @@ if (!$input || !isset($input['action'])) {
 $action = $input['action'];
 
 // Abrir o crear la base de datos SQLite
-$db = new SQLite3('shopping.db');
+$db = new SQLite3('../databases/orange.db');
 
 // Crear las tablas si no existen
 $db->exec("CREATE TABLE IF NOT EXISTS users (
