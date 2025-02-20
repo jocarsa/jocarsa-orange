@@ -47,6 +47,9 @@ body,html{
   
   background: #fff;
 }
+#product-screen{
+	padding:20px;
+}
 .auth-container img{
 	width:50%;
 	margin:auto;
